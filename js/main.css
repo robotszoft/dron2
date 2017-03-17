@@ -1,0 +1,121 @@
+div {
+    cursor:pointer;
+}
+  html { height: 100% }
+  body { height: 100%; margin: 0px; padding: 0px; background-color: #0b76F4; }
+ #googleMap { height: 300% }
+
+     #floating-panel {
+        position: absolute;
+        top: 5px;
+        right: 1%;
+        z-index: 5;
+        background-color: #7eb1ac;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 20px;
+        padding-left: 8px;
+	width: 230px;
+      }
+     #floating-panelT {
+        position: absolute;
+        top: 5px;
+        right: 1%;
+        z-index: 5;
+        background-color: #7eb1ac;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 20px;
+        padding-left: 8px;
+	width: 150px;
+      }
+
+
+     #floating-panelB {
+        position: absolute;
+        top: 50%;
+        left: 35%;
+        z-index: 5;
+        background-color: #7eb1ac;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 20px;
+        padding-left: 8px;
+      }
+
+     #floating-panel2 {
+        position: absolute;
+        top: 80%;
+        left: 5%;
+        z-index: 5;
+        background-color: #7eb1ac;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 20px;
+        padding-left: 8px;
+      }
+
+
+#floating-panel3 {
+        position: absolute;
+        bottom: 5px;
+        left: 1%;
+		width: 60%;
+		height: 30%;
+        z-index: 5;
+        background-color: #7eb1ac;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 20px;
+        padding-left: 8px;
+	visibility: hidden;
+      }
+
+	  #floating-panel4 {
+        position: absolute;
+        bottom: 5px;
+        left: 1%;
+		width: 60%;
+		height: 30%;
+        z-index: 5;
+        background-color: #a8d2a7;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 20px;
+        padding-left: 8px;
+		visibility: hidden;
+		
+		
+      }
+	  
+	  #visib {
+  
+  position: absolute;
+  top: 200;
+  left: 10;
+  
+  }
+#fragment-1,#fragment-2,#fragment-3,#fragment-4,#fragment-5,#fragment-6,#fragment-7,#fragment-8, #set1, #set2, #set3 {
+
+background-color: #7eb1ac;
+
+}
+
+input[type=submit] {
+    width: 100px;
+    height: 35px;
+
+}
+

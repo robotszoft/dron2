@@ -1,0 +1,4 @@
+#!/bin/sh
+
+[ -f /var/www/html/gps/crontab/pi ] && crontab -u pi /var/www/html/gps/crontab/pi
+rm /var/www/html/gps/crontab/pi

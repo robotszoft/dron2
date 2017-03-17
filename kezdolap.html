@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DRÓN-SEC</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" charset="utf-8" />
+
+<link rel="stylesheet" href="js/jquery-ui.css">
+  <script src="js/jquery-3.1.1.js"></script>
+  <script src="js/jquery-ui.js"></script>
+  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBv4Qkt-ViZpuVkKG6bvjTiRR4XJpajFGE&libraries=drawing&libraries=geometry&libraries=animation"></script>
+
+
+  
+ <script type="text/javascript" src="js/global.js"> </script>
+
+
+ <LINK href="js/main.css" rel="stylesheet" type="text/css">
+
+ 
+<script>
+var xkoord = null;
+var ykoord = null;
+var zkoord = 0.0;
+var mode = 0;
+var armed = 0;
+var gps_state = 0;
+var sat = 0;
+var miss = 0;
+var speed = 0;
+var d_akku = 0;
+var g_akku = 0;
+var error = null;
+var error_tmp = null;
+var pre_str = "0x";
+var origox = null;
+var origoy = null;
+
+function origo() {
+
+
+$.get("origo.txt", function(data) {
+var origo_gps = data.split(",");
+xkoord = origo_gps[0];
+origox = origo_gps[0];
+ykoord = origo_gps[1];
+origoy = origo_gps[1];
+});
+
+var center = new google.maps.LatLng(xkoord,ykoord);
+map.setCenter(center);
+console.log(center);
+}
+
+
+
+function initialize()
+{
+var myCenter = new google.maps.LatLng(xkoord,ykoord);
+var mapProp = {
+  center:myCenter,
+  zoom:15,
+  mapTypeId:google.maps.MapTypeId.SATELLITE
+  };
+
+  map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+ 
+ 
+poly = new google.maps.Polyline({
+          strokeColor: '#FFFFFF',
+          strokeOpacity: 1.0,
+          strokeWeight: 3
+        });
+        poly.setMap(map);
+ 
+ google.maps.event.addListener(map, 'click', function(event) {
+
+//    placeMarker(event.latLng);
+//	 var path = poly.getPath();
+//	  path.push(event.latLng);
+ });
+
+ 
+
+//Marker elhelyezése funkció
+
+function placeMarker(location) {
+  
+	
+	//Marker konstruktor
+  var marker = new google.maps.Marker({
+    position: location,
+	    map: map,
+	draggable: true,
+	icon: 'myicon.png',
+}
+
+);
+
+  } //Marker elhelyezés vége
+
+origo();
+
+kirak();
+
+  }
+ 
+ 
+google.maps.event.addDomListener(window, 'load', initialize);
+
+function pl_marker() {
+
+var myposition=new google.maps.LatLng(xkoord,ykoord);
+ var marker = new google.maps.Marker({
+    position: myposition,
+	    map: map,
+	draggable: false,
+	icon: 'myicon.png',
+
+}
+);
+
+map.setCenter(myposition);
+
+flylocation = myposition;
+var path = poly.getPath();
+path.push(myposition);
+
+}
+
+
+function kirak() {
+setInterval(function() {
+
+function hex2float(num) {
+    var sign = (num & 0x80000000) ? -1 : 1;
+    var exponent = ((num >> 23) & 0xff) - 127;
+    var mantissa = 1 + ((num & 0x7fffff) / 0x7fffff);
+    return sign * mantissa * Math.pow(2, exponent);
+console.log(hex2float(num));    
+}
+
+
+//A soros.txt-be írt hexadecimális string felbontása.
+
+$.get("soros.txt", function (data) {
+
+
+if (data.charAt(2) == 'D') { 
+
+if ((data.substring(5,13) != "") && (data.substring(5,13) !="00000000")) {
+xkoord  = (parseInt(data.substring(5,13),16)/10000000).toString();
+//xkoord = data.substring(5,13);
+//var xfloat = hex2float(pre_str.concat(xkoord));
+//xkoord = xfloat.toString().substring(0,9);
+}
+else {
+    xkoord = origox;
+}
+if ((data.substring(13,21) != "") && (data.substring(13,21) !="00000000")) {
+ykoord = (parseInt(data.substring(13,21),16)/10000000).toString();
+//ykoord = data.substring(13,21);
+//var yfloat = hex2float(pre_str.concat(ykoord));
+//ykoord = yfloat.toString().substring(0,9);
+
+}
+else {
+    ykoord = origoy;
+}
+
+if (data.substring(21,27) != "") {
+zkoord = pre_str.concat(data.substring(21,29)).toString();
+if (zkoord > 0x7fffff) {
+zkoord = ((0xFFFFFFFF - zkoord)/1000);
+}
+else {
+zkoord = zkoord /1000;
+}
+//var zfloat = hex2float(pre_str.concat(zkoord));
+//zkoord = zfloat.toString().substring(0,5);
+}
+
+if (data.substring(29,31) !="") {
+mode = data.substring(29,31);
+
+switch (mode)  {
+    case "00":
+    mode = "Stabilized";
+    break;
+
+    case "02":
+    mode = "AltHold";
+    break;
+
+    case "03":
+    mode = "Auto";
+    break;
+
+    case "04":
+    mode = "Guided";
+    break;
+
+    case "05":
+    mode = "Loiter";
+    break;
+
+    case "06":
+    mode = "RTL";
+    break;
+    
+    case "09":
+    mode = "LAND";
+
+}
+
+
+}
+
+if (data.substring(31,33) !="")  {
+
+armed = data.substring(31,33);
+
+    switch (armed) {
+    
+    case "00":
+    armed = "DISARMED";
+    break;
+
+    case "01":
+    armed = "ARMED";
+}
+}
+
+
+if (data.substring(33,35) !="") {
+gps_state = data.substring(33,35);
+    switch (gps_state) {
+
+    case "00":
+    gps_state = "NO";
+    break;
+
+    case "01":
+    gps_state = "NO";
+    break;
+
+    case "02":
+    gps_state = "2D";
+    break;
+
+    case "03":
+    gps_state = "3D";
+    break;
+
+    case "04":
+    gps_state = "DG";
+    break;
+
+    case "05":
+    gps_state = "RT";
+
+}
+
+}
+
+if (data.substring(35,37) !="")
+sat = data.substring(35,37);
+
+if (data.substring(37,39) !="") {
+miss = data.substring(37,39);
+
+    switch (miss) {
+
+    case "00":
+    miss = "No Mission";
+    break;
+
+    case "01":
+    miss = "Got Waypoint";
+    break;
+
+    case "02":
+    miss = "Arming";
+    break;
+
+    case "03":
+    miss = "Take Off";
+    break;
+
+    case "04":
+    miss = "In Mission";
+    break;
+
+    case "05":
+    miss = "Got Target";
+    break;
+    
+    case "06":
+    miss = "Returning";
+    break;
+
+    case "07":
+    miss = "Landing";
+    break;
+
+    case "08":
+    miss = "ManualStart";
+    break;
+
+    case "09":
+    miss = "Manual";
+    break;
+
+    case "0A":
+    miss = "HoldOn";
+    break;
+    
+    case "0B":
+    miss = "AutoStart";
+    break;
+
+    case "0C":
+    miss = "Auto";
+    break;
+
+    case "0D":
+    miss = "Start";
+
+}
+}
+
+
+if (data.substring(39,41) !="")
+speed = data.substring(39,41);
+
+if (data.substring(47,51) !="") {
+d_akku = parseInt(data.substring(47,51),16);
+d_akku = (d_akku*0.01836).toString().substring(0,6);
+
+}
+
+if (data.substring(51,55) !="") {
+g_akku = parseInt(data.substring(51,55),16);
+g_akku = (g_akku*(19.8/1024)).toString().substring(0,6);
+}
+
+//var d = new Date().toUTCString();
+
+//error = error_tmp;
+
+//error = "";
+}
+
+
+
+
+});
+
+
+$.get("log/log.txt", function(tomb) {
+
+sor = tomb.split('\n');
+utolso = sor[sor.length-2];
+
+var n = utolso.indexOf('\0');
+if ( n >0) {
+error = utolso.substring(5,n);
+}
+else {
+error = utolso;
+}
+
+});
+
+
+
+
+
+//A marker kihelyezése
+pl_marker();
+
+//$("#flypos").text(flylocation);
+
+$("#flypos2").text(xkoord);
+$("#flypos3").text(ykoord);
+$("#flypos4").text(zkoord);
+$("#flypos5").text(mode);
+$("#flypos6").text(armed);
+$("#flypos7").text(gps_state);
+$("#flypos8").text(sat);
+$("#flypos9").text(miss);
+$("#flypos10").text(speed);
+$("#flypos11").text(d_akku);
+$("#flypos12").text(g_akku);
+$("#flypos13").text(error);
+
+
+
+
+
+},2000);
+}
+
+
+
+$(function()
+
+            {
+
+$('#reset').click(function(){
+
+	    var parancs = "delete";
+                //    alert('Adat elkuldve');
+
+
+
+                    $.ajax({
+
+                        url: "reset.py",
+
+                        type: "post",
+
+                        datatype:"json",
+
+                        data: JSON.stringify(parancs),
+
+                        success: function(response){
+
+                            voltpost = 1;
+
+			    alert(response);
+
+                        }
+
+			
+
+		    
+
+                    });
+
+
+
+		});
+});
+
+
+</script>
+
+
+
+
+
+</head>
+
+<body>
+
+
+   
+	
+
+	
+
+	 
+<!-- <div id="googleMap" style="width:100%;height:100%;"></div><br>
+-->
+<div align="center">
+<img src="images/dron.jpg" height="50%" width="50%">
+</div>
+ 
+
+<script type="text/javascript" src="js/tabs.js"> </script>
+ 
+ <script type="text/javascript" src="js/spinners.js"> </script>
+ 
+<!--
+<div id="floating-panel">
+<table align="left">
+<tr><td align="left">Pozíció:</td><td id="flypos2" align="left"></td></tr>
+<tr><td align="left">[fok]</td><td id="flypos3" align="left"></td></tr>
+<tr><td align="left">Magasság [m]:</td><td id="flypos4" align="left"></td></tr>
+<tr><td align="left">Üzemmód:</td><td id="flypos5" align="left"></td></tr>
+<tr><td align="left">Élesítés:</td><td id="flypos6" align="left"></td></tr>
+<tr><td align="left">GPS pontosság:</td><td id="flypos7" align="left"></td></tr>
+<tr><td align="left">Műhold [db]:</td><td id="flypos8" align="left"></td></tr>
+<tr><td align="left">Küldetés állapota:</td><td id="flypos9" align="left"></td></tr>
+<tr><td align="left">Sebesség [km/h]:</td><td id="flypos10" align="left"></td></tr>
+<tr><td align="left">Drón akku [V]:</td><td id="flypos11" align="left"></td></tr>
+<tr><td align="left">Bázis akku [V]:</td><td id="flypos12" align="left"></td></tr>
+
+</table>
+<div align="center">
+<table align="center"><tr><td>
+<input type="submit" id="reset" name ="RR" value="Alaphelyzet"></td><td>
+<a href="index.html"><input type="submit" name="tervezes" value="Tervezés"></a></td></tr>
+<tr><td>
+<a href="indexv.html"><input type="submit" name="frissites" value="Frissítés"></a></td><td>
+<a href="logok.html"><input type="submit" name="logok" value="Logok"></a></td></tr>
+</table>
+
+
+</div>
+</div>
+-->
+<div id="floating-panelB">
+<a href="nointernet.html"><input class="szelesgomb"  type="submit" name="nointernet" value="Belépés internet nélkül" style="width: 200px;"></a>
+<a href="indexv.html"><input class="szelesgomb" type="submit" name="internet" value="Belépés internettel" style="width: 200px;"></a>
+
+</div>
+
+
+
+
+</body>
+</html>
+
+
+
