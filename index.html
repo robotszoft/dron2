@@ -111,13 +111,14 @@ utvonal.params.param6 = marker.position.lng().toFixed(6);
 
 if (markerlist[markerid] == null)  { 
 urit();
+/*
 $("#p1").spinner("value",0);
 $("#p2").spinner("value",0);
 $("#p3").spinner("value",0);
 $("#p4").spinner("value",0);
 $("#p7").spinner("value",10);
 utvonal.params.param7 = 0;
-
+*/
  }
  
 else  {
@@ -134,15 +135,25 @@ if (selected == "80") nav_roi();
 if (selected == "178") change_speed();
 if (selected == "206") set_camera();
 if (selected == "115") condition_yaw();
-if (selected == "183") set_servo();
+
+//SET SERVO
+if (selected == "183") {
+set_servo();
+$( "#p2").spinner("value",1);
+$( "#p2").spinner({min: 1});
+$( "#p2").spinner({max: 100});
+$("#p3").spinner("disable");
+}
 if (selected == "177") do_jump();
 if (selected == "201") set_roi();
 
+/*
 $("#p1").spinner("value",markerlist[markerid].param1);
 $("#p2").spinner("value",markerlist[markerid].param2);
 $("#p3").spinner("value",markerlist[markerid].param3);
 $("#p4").spinner("value",markerlist[markerid].param4);
 $("#p7").spinner("value",10);
+*/
 utvonal.params.param7 = 10;
 
 

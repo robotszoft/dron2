@@ -25,7 +25,7 @@ $( "#p6").spinner("destroy");
 $( "#p7").spinner("value",10);
 utvonal.params.param7 = 10;
 $( "#p7").spinner({min: 0});
-
+/*
 $("#p1").spinner("enable");
 $("#p2").spinner("enable");
 $("#p3").spinner("enable");
@@ -34,7 +34,13 @@ $("#p5").attr("disabled", "disabled");
 $("#p6").attr("disabled", "disabled");
 
 $("#p7").spinner("enable");
-	
+	*/
+
+if (utvonal.parancs == "183") {
+	$( "#p2").spinner("value",1);
+	utvonal.params.param2 = 1;
+}
+console.log(utvonal);
 } 
 
 $( "#tabs" ).tabs();
@@ -76,8 +82,8 @@ urit();
 
 //console.log(JSON.stringify(utvonal));
 $("#p1").spinner("enable");
-$("#p2").spinner("enable");
-$("#p3").spinner("enable");
+//$("#p2").spinner("enable");
+//$("#p3").spinner("enable");
 $("#p4").spinner("enable");
 $("#p5").removeAttr("disabled"); //Input text
 $("#p6").removeAttr("disabled"); //Input text
@@ -97,7 +103,7 @@ $("#param7").text("");
 $("#param1").text("Emelkedés");
 $("#param2").text("");
 $("#param3").text("");
-$("#param4").text("Dőlésszög");
+$("#param4").text("Felszólítás");
 $("#param5").text("Szélesség");
 $("#param6").text("Hosszúság");
 $("#param7").text("Magasság");
@@ -112,8 +118,14 @@ function waypoint() {
 console.log(JSON.stringify(utvonal));
 
 $("#p1").spinner("enable");
-$("#p2").spinner("enable");
-$("#p3").spinner("enable");
+$("#p2").spinner("disable");
+$("#p3").spinner("disable");
+$( "#p2").spinner("value",0);
+$( "#p2").spinner({min: 0});
+$( "#p2").spinner({max: 0});
+$( "#p3").spinner("value",0);
+$( "#p3").spinner({min: 0});
+$( "#p3").spinner({max: 0});
 $("#p4").spinner("enable");
 $("#p5").removeAttr("disabled"); //Input text
 $("#p6").removeAttr("disabled"); //Input text
@@ -129,9 +141,9 @@ $("#param6").text("");
 $("#param7").text("");
 
 $("#param1").text("Időzítés");
-$("#param2").text("Kör sugár");
-$("#param3").text("Körözés");
-$("#param4").text("Kitérés szöge");
+//$("#param2").text("Kör sugár");
+//$("#param3").text("Körözés");
+$("#param4").text("Felszólítás");
 $("#param5").text("Szélesség");
 $("#param6").text("Hosszúság");
 $("#param7").text("Magasság");
@@ -204,7 +216,13 @@ console.log(JSON.stringify(utvonal));
 $("#p1").spinner("enable");
 $("#p2").spinner("disable");
 $("#p3").spinner("disable");
-$("#p4").spinner("disable");
+$( "#p2").spinner("value",0);
+$( "#p2").spinner({min: 0});
+$( "#p2").spinner({max: 0});
+$( "#p3").spinner("value",0);
+$( "#p3").spinner({min: 0});
+$( "#p3").spinner({max: 0});
+$("#p4").spinner("enable");
 $("#p5").removeAttr("disabled"); //Input text
 $("#p6").removeAttr("disabled"); //Input text
 
@@ -223,6 +241,7 @@ $("#param7").text("");
 $("#param1").text("Időzítés");
 $("#param2").text("");
 $("#param3").text("");
+$("#param4").text("Felszólítás");
 $("#param5").text("Szélesség");
 $("#param6").text("Hosszúság");
 $("#param7").text("Magasság");
@@ -264,17 +283,17 @@ function nav_roi() {
 	urit();
 
 console.log(JSON.stringify(utvonal));
-$("#p1").spinner("enable");
-$("#p2").spinner("enable");
-$("#p3").spinner("enable");
-$("#p4").spinner("disable");
+$("#p1").spinner("disable");
+$("#p2").spinner("disable");
+$("#p3").spinner("disable");
+$("#p4").spinner("enable");
 //$("#p5").removeAttr("disabled"); //Input text
 //$("#p6").removeAttr("disabled"); //Input text
 $("#p5").spinner()
 $("#p6").spinner()
 $("#p5").spinner("value",0)
 $("#p6").spinner("value",0)
-$("#p7").spinner("enable");
+$("#p7").spinner("disable");
 
 
 $("#param1").text("");
@@ -285,9 +304,9 @@ $("#param5").text("");
 $("#param6").text("");
 $("#param7").text("");
 
-$("#param1").text("Mode");
-$("#param2").text("Mission Index");
-$("#param3").text("ROI index");
+$("#param1").text("");
+$("#param2").text("");
+$("#param4").text("Felszólítás");
 $("#param5").text("X");
 $("#param6").text("Y");
 $("#param7").text("Z");
@@ -300,9 +319,9 @@ function change_speed() {
 	urit();
 
 console.log(JSON.stringify(utvonal));
-$("#p1").spinner("enable");
+$("#p1").spinner("disable");
 $("#p2").spinner("enable");
-$("#p3").spinner("enable");
+$("#p3").spinner("disable");
 $("#p4").spinner("enable");
 $("#p5").attr("disabled","disabled")
 $("#p6").attr("disabled","disabled")
@@ -318,10 +337,10 @@ $("#param5").text("");
 $("#param6").text("");
 $("#param7").text("");
 
-$("#param1").text("Sebesség típus");
+
 $("#param2").text("Sebesség");
-$("#param3").text("Gyorsítás");
-$("#param4").text("Abs / Rel");
+
+$("#param4").text("Felszólítás");
 
 }
 
@@ -360,8 +379,14 @@ function condition_yaw() {
 
 console.log(JSON.stringify(utvonal));
 $("#p1").spinner("enable");
-$("#p2").spinner("enable");
+$("#p2").spinner("disable");
 $("#p3").spinner("enable");
+$( "#p3").spinner("value",1);
+$( "#p3").spinner({min: 1});
+$( "#p3").spinner({max: 1});
+
+utvonal.params.param3 = 1; //3. paraméter fixen megadva
+
 $("#p4").spinner("enable");
 $("#p5").attr("disabled","disabled")
 $("#p6").attr("disabled","disabled")
@@ -377,10 +402,10 @@ $("#param5").text("");
 $("#param6").text("");
 $("#param7").text("");
 
-$("#param1").text("Új szög");
-$("#param2").text("Sebesség");
+$("#param1").text("Szög");
+
 $("#param3").text("Forgásirány");
-$("#param4").text("Abs / Rel");
+$("#param4").text("Felszólítás");
 
 
 }
@@ -391,6 +416,12 @@ function set_servo() {
 console.log(JSON.stringify(utvonal));
 $("#p1").spinner("enable");
 $("#p2").spinner("enable");
+$( "#p2").spinner("value",1);
+$( "#p2").spinner({min: 1});
+$( "#p2").spinner({max: 100});
+$("#p3").spinner("disable");
+$("#p4").spinner("enable");
+
 $("#p5").attr("disabled","disabled")
 $("#p6").attr("disabled","disabled")
 
@@ -405,9 +436,9 @@ $("#param5").text("");
 $("#param6").text("");
 $("#param7").text("");
 
-$("#param1").text("Szervo száma");
-$("#param2").text("PWM");
-
+$("#param1").text("Csatorna száma");
+$("#param2").text("PWM 1-100%");
+$("#param4").text("Felszólítás");
 	
 }
 
@@ -639,7 +670,7 @@ $( "input[type='radio']" ).checkboxradio();
 					console.log(markerlist);
 				document.getElementById("tabs").style.visibility = 'hidden';
 				 var path = poly.getPath();
-	  path.push(firstlocation);
+	  //path.push(firstlocation);
 				});
 				
             });
